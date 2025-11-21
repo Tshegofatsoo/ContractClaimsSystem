@@ -1,0 +1,35 @@
+﻿@model List<ContractClaimsSystem.Models.Claim>
+
+<h2 style="color:pink;">HR Dashboard</h2>
+
+<p>Generate invoice/report for approved claims</p>
+
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse; width:100%;">
+    <tr style="background-color:pink; color:white;">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Document</th>
+    </tr>
+
+    @foreach (var claim in Model.Where(c => c.status == "Approved"))
+    {
+        <tr>
+            <td>@claim.claimID</td>
+            <td>@claim.claimantName</td>
+            <td>@claim.totalAmount</td>
+            <td>@claim.status</td>
+            <td>
+                @if (!string.IsNullOrEmpty(claim.supportingDocumentPath))
+                {
+                    <a href="@claim.supportingDocumentPath" target="_blank" style="color:blue;">View</a>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<p style="margin-top:15px;">
+    <button style="background-color:pink; border:none; padding:10px;">Generate Report (PDF/Excel)</button>
+</p>

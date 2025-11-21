@@ -1,0 +1,60 @@
+﻿@model List<ContractClaimsSystem.Models.Claim>
+
+<h2 style="color:pink;">Claims Dashboard</h2>
+
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse; width:100%;">
+    <tr style="background-color:pink; color:white;">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Hours</th>
+        <th>Rate</th>
+        <th>Total</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Document</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var claim in Model)
+    {
+        <tr>
+            <td>@claim.claimID</td>
+            <td>@claim.claimantName</td>
+            <td>@claim.hoursWorked</td>
+            <td>@claim.hourRate</td>
+            <td>@claim.totalAmount</td>
+            <td>@claim.claimDescription</td>
+            <td>@claim.claimDate.ToString("yyyy-MM-dd")</td>
+            <td>@claim.status</td>
+            <td>
+                @if (!string.IsNullOrEmpty(claim.supportingDocumentPath))
+                {
+                    <a href="@claim.supportingDocumentPath" target="_blank" style="color:blue;">View</a>
+                }
+            </td>
+            <td>
+                @if (claim.status == "Pending")
+                {
+                    <form method="post" asp-action="UpdateStatus" style="display:inline;">
+                        <input type="hidden" name="claimId" value="@claim.claimID" />
+                        <input type="hidden" name="status" value="Approved" />
+                        <button type="submit" style="background-color:green; color:white; border:none; padding:5px 10px;">Approve</button>
+                    </form>
+
+                    <form method="post" asp-action="UpdateStatus" style="display:inline;">
+                        <input type="hidden" name="claimId" value="@claim.claimID" />
+                        <input type="hidden" name="status" value="Rejected" />
+                        <button type="submit" style="background-color:red; color:white; border:none; padding:5px 10px;">Reject</button>
+                    </form>
+                }
+                else
+                {
+                    <span style="color:@(claim.status == "Approved" ? "green" : "red"); font-weight:bold;">
+                        @claim.status
+                    </span>
+                }
+            </td>
+        </tr>
+    }
+</table>
